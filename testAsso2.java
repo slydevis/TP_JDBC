@@ -9,7 +9,8 @@ import java.util.ArrayList;
  * Created by m12002101 on 10/02/14.
  */
 public class testAsso2 {
-    static final String req = " SELECT *" + " FROM PROF, MODULE " + " WHERE MAT_SPEC=CODE" ;
+    static final String req = " SELECT *" + " FROM ETUDIANT ET, MODULE M, NOTATION N" +
+                                                           " WHERE ET.NUM_ET=N.NUM_ET AND M.CODE=N.CODE";
     public static void main(String [] argv) throws SQLException
     {
         try {
@@ -18,35 +19,31 @@ public class testAsso2 {
             Statement statement = conne.createStatement();
             System.out.println( " Execution de la requete : " + req );
             ResultSet resultSet = statement.executeQuery(req);
-            ArrayList<Prof> ProfList = new ArrayList<Prof>();
+            AssociationNotation Anot = AssociationNotation.getInstance();
+
             while (resultSet.next()) {
 
-                Prof Pf = new Prof();
-                Pf.setNumProf(resultSet.getInt("NUM_PROF"));
-                Pf.setNomProf(resultSet.getString("NOM_PROF"));
-                Pf.setPrenomProf(resultSet.getString("PRENOM_PROF"));
-                Pf.setAdrProf(resultSet.getString("ADR_PROF"));
-                Pf.setCpProf(resultSet.getString("CP_PROF"));
-                Pf.setVilleProf(resultSet.getString("VILLE_PROF"));
-
                 Module Mod = new Module();
-                Mod.setCode(resultSet.getString("CODE"));
-                Mod.setLibelle(resultSet.getString("LIBELLE"));
-                Mod.sethCoursPrev(resultSet.getInt("H_COURS_PREV"));
-                Mod.sethCoursRea(resultSet.getInt("H_COURS_REA"));
-                Mod.sethTpPrev(resultSet.getInt("H_TP_PREV"));
-                Mod.sethTpRea(resultSet.getInt("H_TP_REA"));
-                Mod.setDiscipline(resultSet.getString("DISCIPLINE"));
-                Mod.setCoefTest(resultSet.getInt("COEFF_TEST"));
-                Mod.setCoefCc(resultSet.getInt("COEFF_CC"));
+                Mod.setCode(resultSet.getString("M.CODE"));
 
-                Pf.setSpecialiste(Mod);
+                Notation not = new Notation();
 
-                ProfList.add(Pf);
+                not.setMoyCC(resultSet.getInt("MOY_CC"));
+                not.setMoyTest(resultSet.getInt("MOY_TEST"));
+
+                Etudiant et = new Etudiant(
+                        resultSet.getString("NOM_ET"), resultSet.getInt("NUM_ET"), resultSet.getString("PRENOM_ET"),
+                        resultSet.getString("CP_ET"), resultSet.getString("VILLE_ET"),
+                        resultSet.getInt("ANNEE"), resultSet.getInt("GROUPE")
+                );
+                Anot.creerLien(Mod, et, not);
             }
-            // On affiche le tous
 
-            System.out.println(ProfList);
+            Module FindModule = new Module();
+
+            FindModule.setCode("ACSI");
+
+            System.out.println(Anot.getLiens(FindModule).toString());
 
             System.out.println("\n Ok .\n" );
             conne.close();

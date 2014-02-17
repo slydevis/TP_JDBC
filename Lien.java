@@ -13,6 +13,15 @@ public class Lien {
         this.note = new Notation();
     }
 
+    @Override
+    public String toString() {
+        return "Lien{" +
+                "module=" + module +
+                ", etudiant=" + etudiant +
+                ", note=" + note + '\n' +
+                '}';
+    }
+
     public Module getModule()
     {
         return this.module;

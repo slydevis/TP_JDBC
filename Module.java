@@ -11,7 +11,7 @@ public class Module {
     private String discipline;
     private int coefTest;
     private int coefCc;
-    private Prof responsable : Prof;
+    private Prof responsable;
     private Module pere;
 
     public Module getPere() {
