@@ -15,7 +15,7 @@ public class ConnexionUnique {
         connection = null;
         try {
             System.out.println (" Connexion a " + CONNECT_URL) ;
-            connection = DriverManager.getConnection(CONNECT_URL, "root", "mysql");
+            connection = DriverManager.getConnection(CONNECT_URL, "root", "root");
             System.out.println ( " Connecte \n" );
         } catch (SQLException e) {
             e.printStackTrace();
